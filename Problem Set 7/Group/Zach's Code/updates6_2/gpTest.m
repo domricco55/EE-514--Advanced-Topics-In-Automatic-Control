@@ -11,11 +11,11 @@ P.g = 9.81;     % gravitational acceleration [m/s/s]
 P.L = .66;      % Pendulum length [m]
 
 inputs = {'x(1)','x(2)','x(3)','x(4)', 'x(5)', 'x(6)','1','2','-1','0.5',...
-          '7','1/5','-1.85','1/10', '3.14','-3.14','exp(1)','exp(1.5)'...
-%           'cos(x(1))','cos(x(2))','cos(x(3))','cos(x(4))', 'cos(x(5))', 'cos(x(6))',...
-%           'sin(x(1))','sin(x(2))','sin(x(3))','sin(x(4))', 'sin(x(5))', 'sin(x(6))',...
+          '7','1/5','-1.85','1/10', '3.14','-3.14','exp(1)','exp(1.5)',...
+          'tan(x(3))', 'cot(x(3))', 'asin(x(3))', 'acos(x(3))',...
+          'cos(x(3))','cos(x(4))','sin(x(3))','sin(x(4))'};
 %           'sign(x(1))','sign(x(2))','sign(x(3))','sign(x(4))', 'sign(x(5))', 'sign(x(6))',...
-          'tan(x(3))', 'cot(x(3))', 'asin(x(3))', 'acos(x(3))'};
+
 ops = {'plus','minus','times'};
 
 % inputs = {'x(1)','x(2)','x(3)','x(4)','1','2','-1','0.5', 'x(5)', 'x(6)'};
@@ -25,10 +25,10 @@ ops = {'plus','minus','times'};
 
 %Create an initial population
 %these create random trees with varying numbers node levels
-i1 = treePop(30,3, inputs, ops);
-i2 = treePop(30,4, inputs, ops);
-i3 = treePop(5,5, inputs, ops);
-i4 = treePop(15,3, inputs, ops);
+i1 = treePop(10,3, inputs, ops);
+i2 = treePop(10,4, inputs, ops);
+i3 = treePop(10,5, inputs, ops);
+i4 = treePop(10,6, inputs, ops);
 
 %Create gain matricies, for statefeedback controllers
 K1 = [0.5  2.5  200  30]; 
@@ -44,16 +44,16 @@ initPop = [i1 , i2 , i3 , i4,{t1 t2 t3}];
 %% Parameters to Change
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %define reproduction statistics
-crossover = 0.6; mutation = 0.2; 
-eliteVals= 5; numGens = 20;
+crossover = 0.2; mutation = 0.6; 
+eliteVals= 3; numGens = 20;
 %Define simulation timespan when simulating and evaluating control cost
 tspan = [0 10];
 %Define system initial conditions
 x0 = [0 0 pi/10 0 0 0];
 %define cost matricies
-statePenalty = [.5 30 100 20 0 0];
+statePenalty = [0 30 100 20 0 0];
 Q = diag(statePenalty);
-R = 0.1;
+R = 0.001;
 %Set timeout value for integration. Makes code not get stuck solving bad
 %simulations
 timeout = 2; %seconds
